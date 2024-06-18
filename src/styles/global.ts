@@ -9,6 +9,12 @@ export const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding-inline: 1rem;
+  }
+
   body {
     background-color: ${(props) => props.theme.colors.background};
   }
@@ -17,6 +23,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     font-weight: 400;
+    line-height: 130%;
   }
 
   h1, h2, h3 {
