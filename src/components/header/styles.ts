@@ -21,23 +21,24 @@ export const HeaderActions = styled.div`
 `
 
 export const Location = styled.button`
-  background-color: ${(props) => props.theme.colors.brand[100]};
+  background-color: ${(props) => props.theme.colors['purple-light']};
   border-radius: 6px;
   border: none;
 
-  color: ${(props) => props.theme.colors.brand[900]};
+  color: ${(props) => props.theme.colors['purple-dark']};
   font-size: 0.875rem;
 
   display: flex;
   align-items: center;
   gap: 0.25rem;
 
+  min-width: max-content;
   padding: 0.5rem;
 
   cursor: pointer;
 
   svg {
-    fill: ${(props) => props.theme.colors.brand[500]};
+    fill: ${(props) => props.theme.colors.purple};
     height: 1.375rem;
     width: 1.375rem;
   }

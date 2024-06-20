@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
 export const LayoutContainer = styled.div`
-  height: 100dvh;
+  min-height: 100dvh;
   width: 100%;
 `

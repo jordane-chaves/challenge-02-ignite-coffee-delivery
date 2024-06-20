@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const CartContainer = styled(Link)`
-  background-color: ${(props) => props.theme.colors.yellow[100]};
+  background-color: ${(props) => props.theme.colors['yellow-light']};
   border-radius: 6px;
 
   display: flex;
@@ -14,14 +14,14 @@ export const CartContainer = styled(Link)`
   position: relative;
 
   svg {
-    fill: ${(props) => props.theme.colors.yellow[700]};
+    fill: ${(props) => props.theme.colors['yellow-dark']};
     height: 1.375rem;
     width: 1.375rem;
   }
 `
 
 export const CartAmount = styled.span`
-  background-color: ${(props) => props.theme.colors.yellow[700]};
+  background-color: ${(props) => props.theme.colors['yellow-dark']};
   border-radius: 50%;
 
   color: ${(props) => props.theme.colors.white};
