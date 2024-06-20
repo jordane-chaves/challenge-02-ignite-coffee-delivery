@@ -54,6 +54,18 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 700;
   }
 
+  ::-webkit-scrollbar {
+    background-color: 
+      rgba(from  ${(props) => props.theme.colors.title} r g b / 0.1);
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: 
+      rgba(from  ${(props) => props.theme.colors.title} r g b / 0.4);
+    border-radius: 9999px;
+  }
+
   @media (max-width: ${(props) => props.theme.screens.md}) {
     body, button, input, textarea {
       font-size: 0.875rem;
