@@ -9,6 +9,11 @@ export const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  :focus {
+    outline: 0;
+    box-shadow: 0 0 0 2px ${(props) => props.theme.colors['yellow-dark']};
+  }
+
   .container {
     max-width: 72rem;
     margin: 0 auto;
@@ -27,7 +32,7 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 130%;
   }
 
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5 {
     font-family: "Baloo 2", sans-serif;
     font-weight: 800;
     line-height: 130%;
@@ -51,6 +56,12 @@ export const GlobalStyle = createGlobalStyle`
   h4 {
     color: ${(props) => props.theme.colors.subtitle};
     font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    color: ${(props) => props.theme.colors.subtitle};
     font-weight: 700;
   }
 

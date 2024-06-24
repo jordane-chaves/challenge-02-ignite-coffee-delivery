@@ -8,6 +8,8 @@ export const StepContainer = styled.div`
   align-items: center;
   gap: 0.25rem;
 
+  height: 100%;
+
   padding: 0.5rem;
 
   button {
@@ -32,9 +34,10 @@ export const StepContainer = styled.div`
 
   span {
     color: ${(props) => props.theme.colors.title};
+    text-align: center;
+    line-height: 1;
 
     display: inline-block;
-
     width: 1.25rem;
   }
 `

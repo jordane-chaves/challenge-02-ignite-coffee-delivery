@@ -1,40 +1,61 @@
+import { PiShoppingCartSimpleFill, PiTrash } from 'react-icons/pi'
+
 import coffeeImage from '../../assets/coffees/Americano.png'
+import { Button } from '../ui/button'
+import { Step } from '../ui/step'
 import {
-  BuyContainer,
-  BuyFormContainer,
+  CardActions,
   CardContainer,
+  CardFooter,
+  CardVariants,
+  DetailsContainer,
+  Price,
   TagsContainer,
 } from './styles'
-import { Step } from '../step'
-import { PiShoppingCartSimpleFill } from 'react-icons/pi'
-import { Button } from '../button'
 
-export function CoffeeCard() {
+interface CoffeeCardProps {
+  variant?: CardVariants
+}
+
+export function CoffeeCard({ variant = 'catalog' }: CoffeeCardProps) {
+  const showRemoveButton = variant === 'cart'
+  const showAddToCartButton = variant === 'catalog'
+
   return (
-    <CardContainer>
+    <CardContainer $variant={variant}>
       <img src={coffeeImage} alt="" />
 
       <TagsContainer>
         <span>Tradicional</span>
       </TagsContainer>
 
-      <h4>Expresso Tradicional</h4>
+      <DetailsContainer>
+        <h4>Expresso Tradicional</h4>
+        <p>O tradicional café feito com água quente e grãos moídos</p>
 
-      <p>O tradicional café feito com água quente e grãos moídos</p>
+        <CardFooter>
+          <Price>
+            R$ <strong>9,90</strong>
+          </Price>
 
-      <BuyContainer>
-        <span>
-          R$ <strong>9,90</strong>
-        </span>
+          <CardActions>
+            <Step />
 
-        <BuyFormContainer>
-          <Step />
+            {showRemoveButton && (
+              <Button variant="secondary">
+                <PiTrash />
+                Remover
+              </Button>
+            )}
 
-          <Button variant="icon" title="Adicionar ao carrinho">
-            <PiShoppingCartSimpleFill />
-          </Button>
-        </BuyFormContainer>
-      </BuyContainer>
+            {showAddToCartButton && (
+              <Button variant="icon" title="Adicionar ao carrinho">
+                <PiShoppingCartSimpleFill />
+              </Button>
+            )}
+          </CardActions>
+        </CardFooter>
+      </DetailsContainer>
     </CardContainer>
   )
 }

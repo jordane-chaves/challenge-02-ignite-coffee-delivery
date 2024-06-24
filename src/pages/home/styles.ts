@@ -16,7 +16,8 @@ export const HeroContainer = styled.section`
 
   @media (max-width: ${(props) => props.theme.screens.md}) {
     .container {
-      display: block;
+      display: flex;
+      justify-content: center;
       padding-block: 2rem;
     }
   }
@@ -53,6 +54,16 @@ export const HeroImageContainer = styled.div`
   }
 
   @media (max-width: ${(props) => props.theme.screens.lg}) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+
     img {
       display: none;
     }
@@ -71,6 +82,10 @@ export const HeroItems = styled.div`
     justify-content: center;
 
     margin-top: 2.5rem;
+  }
+
+  @media (max-width: ${(props) => props.theme.screens.md}) {
+    justify-content: center;
   }
 `
 
