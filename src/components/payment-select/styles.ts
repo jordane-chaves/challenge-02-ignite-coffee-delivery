@@ -24,6 +24,8 @@ export const PaymentSelectContainer = styled.div`
     font-size: 0.75rem;
     line-height: 160%;
     text-transform: uppercase;
+
+    min-width: max-content;
   }
 
   input {

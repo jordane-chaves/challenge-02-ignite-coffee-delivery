@@ -9,6 +9,10 @@ export const CheckoutContainer = styled.main`
   h5 {
     margin-bottom: 1rem;
   }
+
+  @media (max-width: ${(props) => props.theme.screens.md}) {
+    flex-direction: column-reverse;
+  }
 `
 
 const SectionBase = styled.section`
@@ -18,6 +22,14 @@ const SectionBase = styled.section`
   flex-direction: column;
 
   padding: 2.5rem;
+
+  @media (max-width: ${(props) => props.theme.screens.lg}) {
+    padding: 2rem;
+  }
+
+  @media (max-width: ${(props) => props.theme.screens.md}) {
+    padding: 1.5rem;
+  }
 `
 
 export const FormContainer = styled.div`
@@ -83,12 +95,28 @@ export const AddressesFields = styled.div`
     grid-column-start: 2;
     grid-column-end: 4;
   }
+
+  div:has(input[name='city']) {
+    min-width: 7rem;
+  }
+
+  @media (max-width: ${(props) => props.theme.screens.md}) {
+    grid-template-columns: 1fr;
+
+    div {
+      grid-column: unset !important;
+    }
+  }
 `
 
 export const PaymentSelectContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
   gap: 0.75rem;
+
+  @media (max-width: ${(props) => props.theme.screens.md}) {
+    grid-template-columns: 1fr;
+  }
 `
 
 export const SelectedCoffeesContainer = styled.div`

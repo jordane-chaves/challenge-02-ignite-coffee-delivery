@@ -21,6 +21,7 @@ export const InputContainer = styled.div`
     flex: 1;
 
     padding-block: 0.75rem;
+    width: 100%;
   }
 
   input::placeholder {

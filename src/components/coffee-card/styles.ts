@@ -61,9 +61,8 @@ export const CardFooter = styled.div`
 export const CardActions = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
-
-  height: 2.375rem;
 `
 
 const cardVariants = {
@@ -126,10 +125,6 @@ const cardVariants = {
 
     ${CardFooter} {
       margin-top: 0.5rem;
-    }
-
-    ${CardActions} {
-      height: 2rem;
     }
   `,
 }
