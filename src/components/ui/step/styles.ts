@@ -8,8 +8,6 @@ export const StepContainer = styled.div`
   align-items: center;
   gap: 0.25rem;
 
-  height: 100%;
-
   padding: 0.5rem;
 
   button {

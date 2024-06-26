@@ -41,6 +41,7 @@ export const Price = styled.span`
   color: ${(props) => props.theme.colors.text};
   font-size: 0.875rem;
   line-height: 130%;
+  min-width: fit-content;
 
   strong {
     font-family: 'Baloo 2', sans-serif;
@@ -60,7 +61,7 @@ export const CardFooter = styled.div`
 
 export const CardActions = styled.div`
   display: flex;
-  align-items: center;
+  align-content: stretch;
   flex-wrap: wrap;
   gap: 0.5rem;
 `
