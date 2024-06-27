@@ -7,6 +7,7 @@ import {
 
 import heroImage from '../../assets/hero.png'
 import { CoffeeCard } from '../../components/coffee-card'
+import { coffees } from '../../coffees'
 import {
   CoffeeList,
   Content,
@@ -76,8 +77,8 @@ export function Home() {
         <h2>Nossos cafés</h2>
 
         <CoffeeList>
-          {Array.from({ length: 14 }).map((_, index) => (
-            <CoffeeCard key={index} />
+          {coffees.map((coffee) => (
+            <CoffeeCard key={coffee.id} coffee={coffee} />
           ))}
         </CoffeeList>
       </Content>

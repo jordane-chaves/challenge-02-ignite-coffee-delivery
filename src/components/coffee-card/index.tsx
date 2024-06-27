@@ -1,6 +1,5 @@
 import { PiShoppingCartSimpleFill, PiTrash } from 'react-icons/pi'
 
-import coffeeImage from '../../assets/coffees/Americano.png'
 import { Button } from '../ui/button'
 import { Step } from '../ui/step'
 import {
@@ -13,29 +12,43 @@ import {
   TagsContainer,
 } from './styles'
 
+export interface Coffee {
+  id: string
+  name: string
+  description: string
+  imageUrl: string
+  tags: string[]
+  price: number
+}
+
 interface CoffeeCardProps {
+  coffee: Coffee
   variant?: CardVariants
 }
 
-export function CoffeeCard({ variant = 'catalog' }: CoffeeCardProps) {
+export function CoffeeCard({ coffee, variant = 'catalog' }: CoffeeCardProps) {
   const showRemoveButton = variant === 'cart'
   const showAddToCartButton = variant === 'catalog'
 
+  const formattedPrice = coffee.price.toFixed(2)
+
   return (
     <CardContainer $variant={variant}>
-      <img src={coffeeImage} alt="" />
+      <img src={coffee.imageUrl} alt={coffee.name} />
 
       <TagsContainer>
-        <span>Tradicional</span>
+        {coffee.tags.map((tag) => (
+          <span key={tag}>{tag}</span>
+        ))}
       </TagsContainer>
 
       <DetailsContainer>
-        <h4>Expresso Tradicional</h4>
-        <p>O tradicional café feito com água quente e grãos moídos</p>
+        <h4>{coffee.name}</h4>
+        <p>{coffee.description}</p>
 
         <CardFooter>
           <Price>
-            R$ <strong>9,90</strong>
+            R$ <strong>{formattedPrice}</strong>
           </Price>
 
           <CardActions>
