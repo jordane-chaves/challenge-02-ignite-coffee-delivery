@@ -30,12 +30,20 @@ export const StepContainer = styled.div`
     }
   }
 
-  span {
+  input {
+    background: transparent;
+    border: 0;
+
     color: ${(props) => props.theme.colors.title};
     text-align: center;
     line-height: 1;
 
     display: inline-block;
     width: 1.25rem;
+  }
+
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
   }
 `

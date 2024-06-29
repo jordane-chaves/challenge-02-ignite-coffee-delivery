@@ -59,7 +59,7 @@ export const CardFooter = styled.div`
   margin-top: 2rem;
 `
 
-export const CardActions = styled.div`
+export const CardForm = styled.form`
   display: flex;
   align-content: stretch;
   flex-wrap: wrap;

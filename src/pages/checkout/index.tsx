@@ -6,6 +6,14 @@ import {
   PiMoney,
 } from 'react-icons/pi'
 
+import { coffees } from '../../../data.json'
+import { appConfig } from '../../config/app'
+import { CoffeeCard } from '../../components/coffee-card'
+import { PaymentSelect } from '../../components/payment-select'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
+import { useCart } from '../../contexts/cart'
+import { formatAsCurrency } from '../../utils/format-as-currency'
 import {
   AddressesFields,
   CheckoutContainer,
@@ -18,12 +26,33 @@ import {
   SelectedCoffeesSection,
   Summary,
 } from './styles'
-import { Input } from '../../components/ui/input'
-import { PaymentSelect } from '../../components/payment-select'
-import { Button } from '../../components/ui/button'
-import { CoffeeCard } from '../../components/coffee-card'
 
 export function Checkout() {
+  const { cartItems } = useCart()
+
+  const coffeesInCart = cartItems.map((item) => {
+    const coffee = coffees.find((coffee) => coffee.id === item.coffeeId)
+
+    if (!coffee) {
+      throw new Error('Invalid coffee.')
+    }
+
+    return {
+      ...coffee,
+      amount: item.amount,
+    }
+  })
+
+  const totalCoffeesInCartPrice = coffeesInCart.reduce((result, coffee) => {
+    return result + coffee.amount * coffee.price
+  }, 0)
+
+  const totalPrice = totalCoffeesInCartPrice + appConfig.DELIVERY_PRICE
+
+  const formattedTotalCoffeesInCart = formatAsCurrency(totalCoffeesInCartPrice)
+  const formattedDelivery = formatAsCurrency(appConfig.DELIVERY_PRICE)
+  const formattedTotal = formatAsCurrency(totalPrice)
+
   return (
     <CheckoutContainer className="container">
       <FormContainer>
@@ -110,9 +139,13 @@ export function Checkout() {
 
         <SelectedCoffeesSection>
           <CoffeeList>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <li key={index}>
-                <CoffeeCard variant="cart" />
+            {coffeesInCart.map((coffee) => (
+              <li key={coffee.id}>
+                <CoffeeCard
+                  variant="cart"
+                  coffee={coffee}
+                  coffeeAmount={coffee.amount}
+                />
               </li>
             ))}
           </CoffeeList>
@@ -120,15 +153,15 @@ export function Checkout() {
           <Summary>
             <div>
               <span>Total de itens</span>
-              <span>R$ 29,70</span>
+              <span>{formattedTotalCoffeesInCart}</span>
             </div>
             <div>
               <span>Entrega</span>
-              <span>R$ 3,50</span>
+              <span>{formattedDelivery}</span>
             </div>
             <div>
               <strong>Total</strong>
-              <strong>R$ 33,20</strong>
+              <strong>{formattedTotal}</strong>
             </div>
           </Summary>
 

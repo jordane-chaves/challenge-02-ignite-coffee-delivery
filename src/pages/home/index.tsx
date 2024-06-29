@@ -5,9 +5,11 @@ import {
   PiTimerFill,
 } from 'react-icons/pi'
 
+import { coffees } from '../../../data.json'
+
 import heroImage from '../../assets/hero.png'
 import { CoffeeCard } from '../../components/coffee-card'
-import { coffees } from '../../coffees'
+
 import {
   CoffeeList,
   Content,
