@@ -11,6 +11,7 @@ export const defaultTheme = {
     text: '#564f4c',
     subtitle: '#3f3937',
     title: '#262220',
+    error: '#FF3A20',
 
     /* brand */
     'purple-light': '#ebe5f9',

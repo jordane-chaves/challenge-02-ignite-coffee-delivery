@@ -1,13 +1,24 @@
-import { ComponentProps } from 'react'
+import { ComponentProps, LegacyRef, forwardRef } from 'react'
 
-import { InputContainer } from './styles'
+import { BaseInputContainer, InputContainer, ErrorMessage } from './styles'
 
-interface InputProps extends ComponentProps<'input'> {}
+interface InputProps extends ComponentProps<'input'> {
+  errorMessage?: string
+}
 
-export function Input(props: InputProps) {
+function InputBase(
+  { errorMessage, ...props }: InputProps,
+  ref: LegacyRef<HTMLInputElement>,
+) {
   return (
     <InputContainer>
-      <input {...props} />
+      <BaseInputContainer>
+        <input ref={ref} {...props} />
+      </BaseInputContainer>
+
+      {!!errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </InputContainer>
   )
 }
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(InputBase)

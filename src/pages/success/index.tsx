@@ -1,6 +1,11 @@
+import { useEffect, useState } from 'react'
 import { PiCurrencyDollar, PiMapPinFill, PiTimerFill } from 'react-icons/pi'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import deliverymanImage from '../../assets/deliveryman.png'
+import { useCart } from '../../contexts/cart'
+import { Order } from '../../reducers/cart/reducer'
+import { paymentMethods } from '../checkout'
 import {
   InfoItem,
   OrderInfo,
@@ -8,7 +13,36 @@ import {
   SuccessContainer,
 } from './styles'
 
+type RouteParams = {
+  orderId: string
+}
+
 export function Success() {
+  const [order, setOrder] = useState<Order>()
+
+  const { orders } = useCart()
+
+  const navigate = useNavigate()
+  const { orderId } = useParams<RouteParams>()
+
+  useEffect(() => {
+    const item = orders.find((item) => item.id === orderId)
+
+    if (!item) {
+      return navigate('/')
+    }
+
+    setOrder(item)
+  }, [orderId, orders, navigate])
+
+  if (!order) {
+    return null
+  }
+
+  const firstAddress = `${order.street}, ${order.number}`
+  const secondAddress = `${order.neighborhood} - ${order.city}, ${order.state}`
+  const paymentMethod = paymentMethods[order.paymentMethod].label
+
   return (
     <SuccessContainer className="container">
       <h2>Uhu! Pedido confirmado</h2>
@@ -22,9 +56,9 @@ export function Success() {
             </div>
             <div>
               <p>
-                Entrega em <strong>Rua João Daniel Martinelli, 102</strong>
+                Entrega em <strong>{firstAddress}</strong>
               </p>
-              <p>Farrapos - Porto Alegre, RS</p>
+              <p>{secondAddress}</p>
             </div>
           </InfoItem>
 
@@ -44,7 +78,7 @@ export function Success() {
             </div>
             <div>
               <p>Pagamento na entrega</p>
-              <strong>Cartão de Crédito</strong>
+              <strong>{paymentMethod}</strong>
             </div>
           </InfoItem>
         </OrderInfo>

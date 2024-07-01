@@ -1,6 +1,12 @@
 import styled from 'styled-components'
 
 export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`
+
+export const BaseInputContainer = styled.div`
   background-color: ${(props) => props.theme.colors.input};
   border-radius: 4px;
   box-shadow: 0 0 0 1px ${(props) => props.theme.colors.button};
@@ -32,6 +38,14 @@ export const InputContainer = styled.div`
     box-shadow: none;
   }
 
+  &:has(input:user-invalid) {
+    box-shadow: 0 0 0 1px ${(props) => props.theme.colors.error};
+
+    input {
+      color: ${(props) => props.theme.colors.error};
+    }
+  }
+
   &:has(input:not(:required))::after {
     content: 'Opcional';
 
@@ -43,4 +57,11 @@ export const InputContainer = styled.div`
   &:has(input:focus) {
     outline: 2px solid ${(props) => props.theme.colors['yellow-dark']};
   }
+`
+
+export const ErrorMessage = styled.span`
+  color: ${(props) => props.theme.colors.error};
+
+  font-size: 0.75rem;
+  padding-left: 4px;
 `

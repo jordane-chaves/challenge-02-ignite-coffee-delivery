@@ -109,6 +109,12 @@ export const AddressesFields = styled.div`
   }
 `
 
+export const PaymentMethodsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`
+
 export const PaymentSelectContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
@@ -117,6 +123,13 @@ export const PaymentSelectContainer = styled.div`
   @media (max-width: ${(props) => props.theme.screens.md}) {
     grid-template-columns: 1fr;
   }
+`
+
+export const PaymentErrorMessage = styled.span`
+  color: ${(props) => props.theme.colors.error};
+
+  font-size: 0.75rem;
+  padding-left: 4px;
 `
 
 export const SelectedCoffeesContainer = styled.div`

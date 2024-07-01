@@ -11,7 +11,7 @@ const buttonVariants = {
 
     padding: 0.75rem 0.5rem;
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${(props) => props.theme.colors['yellow-dark']};
     }
   `,
@@ -32,7 +32,7 @@ const buttonVariants = {
       width: 1rem;
     }
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${(props) => props.theme.colors.hover};
       color: ${(props) => props.theme.colors.subtitle};
 
@@ -52,7 +52,7 @@ const buttonVariants = {
       width: 22px;
     }
 
-    &:hover {
+    &:not(:disabled):hover {
       background-color: ${(props) => props.theme.colors.purple};
     }
   `,
@@ -76,6 +76,11 @@ const ButtonBase = styled.button`
 
   cursor: pointer;
   transition: background 200ms;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 `
 
 export const ButtonContainer = styled(ButtonBase)<ButtonContainerProps>`

@@ -1,24 +1,41 @@
+import { useNavigate } from 'react-router-dom'
 import {
   PropsWithChildren,
   createContext,
   useContext,
   useEffect,
-  useState,
+  useReducer,
 } from 'react'
 
 import { storageConfig } from '../config/storage'
+import { CartItem, Order, cartReducer } from '../reducers/cart/reducer'
+import {
+  addItemAction,
+  checkoutAction,
+  decrementItemAmountAction,
+  incrementItemAmountAction,
+  removeItemAction,
+} from '../reducers/cart/actions'
 
-interface CartItem {
-  coffeeId: string
-  amount: number
+interface CheckoutData {
+  cep: string
+  street: string
+  number: number
+  complement?: string | null
+  neighborhood: string
+  city: string
+  state: string
+  paymentMethod: string
 }
 
 interface CartContextProps {
-  cartItems: CartItem[]
+  items: CartItem[]
+  orders: Order[]
   addItemToCart: (item: CartItem) => void
   removeItemFromCart: (itemId: string) => void
   decrementItemAmount: (itemId: string) => void
   incrementItemAmount: (itemId: string) => void
+  checkout: (data: CheckoutData) => void
 }
 
 export const CartContext = createContext({} as CartContextProps)
@@ -30,82 +47,79 @@ export function useCart() {
 const { CART_KEY } = storageConfig
 
 export function CartContextProvider({ children }: PropsWithChildren) {
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-    const storedStateAsJSON = localStorage.getItem(CART_KEY)
+  const [cartState, dispatch] = useReducer(
+    cartReducer,
+    {
+      items: [],
+      orders: [],
+    },
+    (initialState) => {
+      const storedStateJSON = localStorage.getItem(CART_KEY)
 
-    if (storedStateAsJSON) {
-      return JSON.parse(storedStateAsJSON)
-    }
-
-    return []
-  })
-
-  function addItemToCart(item: CartItem) {
-    setCartItems((state) => {
-      const itemIndex = state.findIndex(
-        (cartItem) => cartItem.coffeeId === item.coffeeId,
-      )
-
-      const newState = [...state]
-
-      if (itemIndex >= 0) {
-        newState[itemIndex] = item
-      } else {
-        newState.push(item)
+      if (storedStateJSON) {
+        return JSON.parse(storedStateJSON)
       }
 
-      return newState
-    })
+      return initialState
+    },
+  )
+
+  const { items, orders } = cartState
+
+  const navigate = useNavigate()
+
+  function addItemToCart(newItem: CartItem) {
+    dispatch(addItemAction(newItem))
   }
 
   function removeItemFromCart(itemId: string) {
-    setCartItems((state) => state.filter((item) => item.coffeeId !== itemId))
+    dispatch(removeItemAction(itemId))
   }
 
   function decrementItemAmount(itemId: string) {
-    setCartItems((state) =>
-      state.map((cartItem) => {
-        if (cartItem.coffeeId === itemId) {
-          return {
-            ...cartItem,
-            amount: cartItem.amount - 1,
-          }
-        } else {
-          return cartItem
-        }
-      }),
-    )
+    dispatch(decrementItemAmountAction(itemId))
   }
 
   function incrementItemAmount(itemId: string) {
-    setCartItems((state) =>
-      state.map((cartItem) => {
-        if (cartItem.coffeeId === itemId) {
-          return {
-            ...cartItem,
-            amount: cartItem.amount + 1,
-          }
-        } else {
-          return cartItem
-        }
-      }),
-    )
+    dispatch(incrementItemAmountAction(itemId))
+  }
+
+  function checkout(data: CheckoutData) {
+    const newOrder: Order = {
+      id: crypto.randomUUID(),
+      items,
+      cep: data.cep,
+      city: data.city,
+      neighborhood: data.neighborhood,
+      number: data.number,
+      state: data.state,
+      street: data.street,
+      complement: data.complement,
+      paymentMethod: data.paymentMethod,
+      createdAt: new Date(),
+    }
+
+    dispatch(checkoutAction(newOrder))
+
+    return navigate(`/order/${newOrder.id}/success`)
   }
 
   useEffect(() => {
-    const stateJSON = JSON.stringify(cartItems)
+    const stateJSON = JSON.stringify(cartState)
 
     localStorage.setItem(CART_KEY, stateJSON)
-  }, [cartItems])
+  }, [cartState])
 
   return (
     <CartContext.Provider
       value={{
-        cartItems,
+        items,
+        orders,
         addItemToCart,
         removeItemFromCart,
         decrementItemAmount,
         incrementItemAmount,
+        checkout,
       }}
     >
       {children}

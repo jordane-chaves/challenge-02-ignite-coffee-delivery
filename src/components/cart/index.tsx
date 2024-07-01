@@ -4,14 +4,14 @@ import { useCart } from '../../contexts/cart'
 import { CartAmount, CartContainer } from './styles'
 
 export function Cart() {
-  const { cartItems } = useCart()
+  const { items } = useCart()
 
-  const cartItemsAmount = cartItems.length
+  const itemsAmount = items.length
 
   return (
     <CartContainer to="/checkout" title="Ir ao carrinho">
       <PiShoppingCartFill />
-      <CartAmount>{cartItemsAmount}</CartAmount>
+      <CartAmount>{itemsAmount}</CartAmount>
     </CartContainer>
   )
 }

@@ -1,3 +1,4 @@
+import { ElementType } from 'react'
 import {
   PiBank,
   PiCreditCard,
@@ -5,6 +6,9 @@ import {
   PiMapPinLine,
   PiMoney,
 } from 'react-icons/pi'
+import { FormProvider, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import { coffees } from '../../../data.json'
 import { appConfig } from '../../config/app'
@@ -14,11 +18,14 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { useCart } from '../../contexts/cart'
 import { formatAsCurrency } from '../../utils/format-as-currency'
+import { CepInput } from './components/cep-input'
 import {
   AddressesFields,
   CheckoutContainer,
   CoffeeList,
   FormContainer,
+  PaymentErrorMessage,
+  PaymentMethodsContainer,
   PaymentSelectContainer,
   Section,
   SectionHeader,
@@ -27,10 +34,70 @@ import {
   Summary,
 } from './styles'
 
-export function Checkout() {
-  const { cartItems } = useCart()
+type PaymentMethods = Record<
+  string,
+  {
+    icon: ElementType
+    label: string
+  }
+>
 
-  const coffeesInCart = cartItems.map((item) => {
+export const paymentMethods: PaymentMethods = {
+  credit: { icon: PiCreditCard, label: 'Cartão de Crédito' },
+  debit: { icon: PiBank, label: 'Cartão de Débito' },
+  money: { icon: PiMoney, label: 'Dinheiro' },
+}
+
+const checkoutFormSchema = z.object({
+  cep: z
+    .string()
+    .min(1, 'Preencha o CEP')
+    .regex(/\d{5}-\d{3}/, 'Formato de CEP inválido.'),
+  street: z.string().min(1, 'Preencha a Rua'),
+  number: z
+    .number({ message: 'Preencha o Número' })
+    .min(1, 'Preencha o Número'),
+  complement: z.string().optional(),
+  neighborhood: z.string().min(1, 'Preencha o Bairro'),
+  city: z.string().min(1, 'Preencha a Cidade'),
+  state: z
+    .string()
+    .min(1, 'Preencha a sigla do Estado')
+    .length(2, 'Preencha a sigla do Estado')
+    .regex(/[A-Z]{2}/, 'Formato inválido'),
+  paymentMethod: z.enum(['credit', 'debit', 'money'], {
+    message: 'Selecione o método de pagamento',
+  }),
+})
+
+export type CheckoutFormSchema = z.infer<typeof checkoutFormSchema>
+
+export function Checkout() {
+  const { items, checkout } = useCart()
+
+  const checkoutForm = useForm<CheckoutFormSchema>({
+    resolver: zodResolver(checkoutFormSchema),
+  })
+
+  const {
+    formState: { errors, isValid: isValidForm },
+    handleSubmit,
+    register,
+    reset,
+  } = checkoutForm
+
+  const isCartEmpty = items.length === 0
+
+  function handleCheckout(data: CheckoutFormSchema) {
+    if (isCartEmpty) {
+      return alert('É necessário ter pelo menos 1 item no carrinho.')
+    }
+
+    checkout(data)
+    reset()
+  }
+
+  const coffeesInCart = items.map((item) => {
     const coffee = coffees.find((coffee) => coffee.id === item.coffeeId)
 
     if (!coffee) {
@@ -53,85 +120,117 @@ export function Checkout() {
   const formattedDelivery = formatAsCurrency(appConfig.DELIVERY_PRICE)
   const formattedTotal = formatAsCurrency(totalPrice)
 
+  const isSubmitDisabled = (false && !isValidForm) || isCartEmpty
+
   return (
     <CheckoutContainer className="container">
       <FormContainer>
         <h5>Complete seu pedido</h5>
 
-        <form>
-          <Section>
-            <SectionHeader $iconColor="yellow-dark">
-              <PiMapPinLine />
+        <FormProvider {...checkoutForm}>
+          <form id="checkout-form" onSubmit={handleSubmit(handleCheckout)}>
+            <Section>
+              <SectionHeader $iconColor="yellow-dark">
+                <PiMapPinLine />
 
-              <div>
-                <p>Endereço de entrega</p>
-                <span>Informe o endereço onde deseja receber seu pedido</span>
-              </div>
-            </SectionHeader>
+                <div>
+                  <p>Endereço de entrega</p>
+                  <span>Informe o endereço onde deseja receber seu pedido</span>
+                </div>
+              </SectionHeader>
 
-            <AddressesFields>
-              <Input type="text" name="cep" placeholder="CEP" required />
+              <AddressesFields>
+                <CepInput />
 
-              <Input type="text" name="street" placeholder="Rua" required />
+                <Input
+                  type="text"
+                  placeholder="Rua"
+                  required
+                  errorMessage={errors.street?.message}
+                  {...register('street')}
+                />
 
-              <Input
-                type="number"
-                name="number"
-                placeholder="Número"
-                min={1}
-                required
-              />
+                <Input
+                  type="number"
+                  placeholder="Número"
+                  min={1}
+                  required
+                  errorMessage={errors.number?.message}
+                  {...register('number', { valueAsNumber: true })}
+                />
 
-              <Input type="text" name="complement" placeholder="Complemento" />
+                <Input
+                  type="text"
+                  placeholder="Complemento"
+                  errorMessage={errors.complement?.message}
+                  {...register('complement')}
+                />
 
-              <Input
-                type="text"
-                name="neighborhood"
-                placeholder="Bairro"
-                required
-              />
+                <Input
+                  type="text"
+                  placeholder="Bairro"
+                  required
+                  errorMessage={errors.neighborhood?.message}
+                  {...register('neighborhood')}
+                />
 
-              <Input type="text" name="city" placeholder="Cidade" required />
+                <Input
+                  type="text"
+                  placeholder="Cidade"
+                  required
+                  errorMessage={errors.city?.message}
+                  {...register('city')}
+                />
 
-              <Input
-                type="text"
-                name="state"
-                placeholder="UF"
-                maxLength={2}
-                required
-              />
-            </AddressesFields>
-          </Section>
+                <Input
+                  type="text"
+                  placeholder="UF"
+                  maxLength={2}
+                  required
+                  errorMessage={errors.state?.message}
+                  {...register('state')}
+                />
+              </AddressesFields>
+            </Section>
 
-          <Section>
-            <SectionHeader $iconColor="purple">
-              <PiCurrencyDollar />
-              <div>
-                <p>Pagamento</p>
-                <span>
-                  O pagamento é feito na entrega. Escolha a forma que deseja
-                  pagar
-                </span>
-              </div>
-            </SectionHeader>
+            <Section>
+              <SectionHeader $iconColor="purple">
+                <PiCurrencyDollar />
+                <div>
+                  <p>Pagamento</p>
+                  <span>
+                    O pagamento é feito na entrega. Escolha a forma que deseja
+                    pagar
+                  </span>
+                </div>
+              </SectionHeader>
 
-            <PaymentSelectContainer>
-              <PaymentSelect
-                name="payment"
-                icon={PiCreditCard}
-                label="Cartão de Crédito"
-              />
+              <PaymentMethodsContainer>
+                <PaymentSelectContainer>
+                  {Object.keys(paymentMethods).map((key) => {
+                    const method = paymentMethods[key]
 
-              <PaymentSelect
-                name="payment"
-                icon={PiBank}
-                label="Cartão de Débito"
-              />
+                    return (
+                      <PaymentSelect
+                        key={key}
+                        icon={method.icon}
+                        label={method.label}
+                        {...register('paymentMethod')}
+                        value={key}
+                      />
+                    )
+                  })}
+                </PaymentSelectContainer>
 
-              <PaymentSelect name="payment" icon={PiMoney} label="Dinheiro" />
-            </PaymentSelectContainer>
-          </Section>
-        </form>
+                {!!errors.paymentMethod && (
+                  <PaymentErrorMessage>
+                    {errors.paymentMethod?.message}
+                  </PaymentErrorMessage>
+                )}
+              </PaymentMethodsContainer>
+            </Section>
+          </form>
+        </FormProvider>
       </FormContainer>
 
       <SelectedCoffeesContainer>
@@ -165,7 +264,14 @@ export function Checkout() {
             </div>
           </Summary>
 
-          <Button>Confirmar Pedido</Button>
+          <Button
+            type="submit"
+            form="checkout-form"
+            disabled={isSubmitDisabled}
+            title={isSubmitDisabled ? 'Preencha o formulário' : undefined}
+          >
+            Confirmar Pedido
+          </Button>
         </SelectedCoffeesSection>
       </SelectedCoffeesContainer>
     </CheckoutContainer>
