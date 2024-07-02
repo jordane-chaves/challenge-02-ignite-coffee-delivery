@@ -176,3 +176,37 @@ export const Summary = styled.div`
     line-height: 130%;
   }
 `
+
+export const EmptyCartContainer = styled(Section)`
+  border-radius: 6px 44px 6px 44px;
+  text-align: center;
+
+  margin-top: 8rem;
+  padding: 3rem;
+  width: 100%;
+
+  position: relative;
+
+  img {
+    max-width: 12rem;
+
+    position: absolute;
+    top: -6.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  h2 {
+    margin-top: 2rem;
+  }
+
+  p {
+    margin-top: 0.5rem;
+  }
+
+  button {
+    align-self: center;
+    max-width: 10rem;
+    width: 100%;
+  }
+`

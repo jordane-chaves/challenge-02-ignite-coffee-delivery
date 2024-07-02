@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ElementType } from 'react'
 import {
   PiBank,
@@ -7,9 +8,10 @@ import {
   PiMoney,
 } from 'react-icons/pi'
 import { FormProvider, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
+import coffeeImage from '../../assets/coffee.svg'
 import { coffees } from '../../../data.json'
 import { appConfig } from '../../config/app'
 import { CoffeeCard } from '../../components/coffee-card'
@@ -23,6 +25,7 @@ import {
   AddressesFields,
   CheckoutContainer,
   CoffeeList,
+  EmptyCartContainer,
   FormContainer,
   PaymentErrorMessage,
   PaymentMethodsContainer,
@@ -75,6 +78,8 @@ export type CheckoutFormSchema = z.infer<typeof checkoutFormSchema>
 export function Checkout() {
   const { items, checkout } = useCart()
 
+  const navigate = useNavigate()
+
   const checkoutForm = useForm<CheckoutFormSchema>({
     resolver: zodResolver(checkoutFormSchema),
   })
@@ -88,6 +93,10 @@ export function Checkout() {
 
   const isCartEmpty = items.length === 0
 
+  function goToHome() {
+    navigate('/')
+  }
+
   function handleCheckout(data: CheckoutFormSchema) {
     if (isCartEmpty) {
       return alert('É necessário ter pelo menos 1 item no carrinho.')
@@ -95,6 +104,23 @@ export function Checkout() {
 
     checkout(data)
     reset()
+  }
+
+  if (isCartEmpty) {
+    return (
+      <CheckoutContainer className="container">
+        <EmptyCartContainer>
+          <img src={coffeeImage} />
+
+          <div>
+            <h2>Seu carrinho está vazio</h2>
+            <p>Escolha um café fresquinho na página inicial.</p>
+          </div>
+
+          <Button onClick={goToHome}>Página inicial</Button>
+        </EmptyCartContainer>
+      </CheckoutContainer>
+    )
   }
 
   const coffeesInCart = items.map((item) => {
