@@ -31,6 +31,18 @@ Esse projeto é um dos desafios da trilha ReactJS da [Rocketseat](https://www.ro
   <img alt="Visualização da aplicação" src="./.github/preview.png" />
 </p>
 
+O objetivo deste desafio foi desenvolver uma aplicação para gerenciar um carrinho de compras de uma cafeteria fictícia.
+
+Foi incrível desenvolver esta aplicação, nela pude aplicar conceitos como:
+
+- Estados
+- ContextAPI
+- LocalStorage
+- Imutabilidade do estado
+- Listas e chaves no ReactJS
+- Propriedades
+- Componentização
+
 ## 🚀 Tecnologias
 
 Esse projeto foi desenvolvido com as seguintes tecnologias:
