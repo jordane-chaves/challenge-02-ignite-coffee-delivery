@@ -18,6 +18,9 @@
 <p align="center">
   <a href="https://github.com/jordane-chaves/food-explorer-frontend/blob/main/LICENSE">
     <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=49AA26&labelColor=000000">
+  </a>&nbsp;&nbsp;
+  <a href="https://app.netlify.com/sites/challenge-coffee-delivery/deploys">
+    <img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/408d5354-456b-4bf3-afbc-82062b264c0e/deploy-status">
   </a>
 </p>
 
@@ -26,10 +29,6 @@
 **Coffee Delivery** é uma página web de catálogo e compra de cafés.
 
 Esse projeto é um dos desafios da trilha ReactJS da [Rocketseat](https://www.rocketseat.com.br/).
-
-<p align="center">
-  <img alt="Visualização da aplicação" src="./.github/preview.png" />
-</p>
 
 O objetivo deste desafio foi desenvolver uma aplicação para gerenciar um carrinho de compras de uma cafeteria fictícia.
 
@@ -42,6 +41,15 @@ Foi incrível desenvolver esta aplicação, nela pude aplicar conceitos como:
 - Listas e chaves no ReactJS
 - Propriedades
 - Componentização
+
+<p align="center">
+  <a href="https://challenge-coffee-delivery.netlify.app/">
+    <img alt="Visualização da aplicação" src="./.github/preview.png" />
+    <span>https://challenge-coffee-delivery.netlify.app/</span>
+  </a>
+</p>
+
+
 
 ## 🚀 Tecnologias
 
